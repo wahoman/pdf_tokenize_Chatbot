@@ -35,8 +35,8 @@ def query_gpt(question, tokens):
     start_time = time.time()  # 질문 처리 시작 시간
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": "Answer the following question:"},
-                  {"role": "user", "content": f"Question: {question} based on the context: {context}"}]
+        messages=[{"role": "system", "content": "다음 질문에 답하세요:"},
+                  {"role": "user", "content": f"질문: {question} based on the context: {context}"}]
     )
     end_time = time.time()  # 질문 처리 종료 시간
     processing_time = end_time - start_time  # 처리 시간 계산
@@ -53,7 +53,7 @@ async def get_answer(question: str = Form(...)):
     if answer:
         return JSONResponse(content={"answer": answer, "time": processing_time}, status_code=200)
     else:
-        return JSONResponse(content={"answer": "Sorry, no answer found.", "time": processing_time}, status_code=404)
+        return JSONResponse(content={"answer": "그부분은 잘 모르겠어요", "time": processing_time}, status_code=404)
 
 if __name__ == "__main__":
     import uvicorn

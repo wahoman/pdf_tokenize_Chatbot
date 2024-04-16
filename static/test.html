@@ -6,12 +6,12 @@
 <title>PDF Question Answering</title>
 </head>
 <body>
-<h1>Ask a Question</h1>
+<h1>메뉴얼 챗봇</h1>
 <form id="questionForm" action="/answer/" method="post">
-    <input type="text" name="question" placeholder="Enter your question" required><br><br>
-    <button type="submit">Submit</button>
+    <input type="text" name="question" placeholder="입력" required><br><br>
+    <button type="submit">물어보기</button>
 </form>
-<div id="responseArea">Ask your question!</div>
+<div id="responseArea">질문을 입력해주세요!</div>
 
 <script>
 document.getElementById("questionForm").onsubmit = async function(event) {
