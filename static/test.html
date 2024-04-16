@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Question Answering</title>
+</head>
+<body>
+<h1>Ask a Question</h1>
+<form id="questionForm" action="/answer/" method="post">
+    <input type="text" name="question" placeholder="Enter your question" required><br><br>
+    <button type="submit">Submit</button>
+</form>
+<div id="responseArea">Ask your question!</div>
+
+<script>
+document.getElementById("questionForm").onsubmit = async function(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const response = await fetch('/answer/', {
+        method: 'POST',
+        body: formData
+    });
+    const result = await response.json();
+
+    let answerText = result.answer || 'Error: No response from server.';
+    if (result.time !== undefined) {
+        answerText += `\n 처리 시간: ${result.time.toFixed(2)}초`;
+    }
+
+    document.getElementById("responseArea").innerText = answerText;
+};
+</script>
+</body>
+</html>
