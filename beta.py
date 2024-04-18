@@ -35,7 +35,7 @@ def query_gpt(question, tokens):
     start_time = time.time()  # 질문 처리 시작 시간
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": "다음 질문에 답하세요:"},
+        messages=[{"role": "system", "content": "질문이 내용과 관련이 없다면 모른다고 해야합니다. 하지만 내용과 관련있는 정보에 대해서는 대답해도 좋습니다.:"},
                   {"role": "user", "content": f"질문: {question} based on the context: {context}"}]
     )
     end_time = time.time()  # 질문 처리 종료 시간
@@ -45,7 +45,7 @@ def query_gpt(question, tokens):
 
 @app.post("/answer/")
 async def get_answer(question: str = Form(...)):
-    tokens_file_path = 'C:/Users/SSTLabs/Desktop/여형구/gptapi/tokens.json'
+    tokens_file_path = 'C:/Users/SSTLabs/Desktop/여형구/LLM_RAG/tokens.json'
     tokens = load_tokens(tokens_file_path)
     answer, processing_time = query_gpt(question, tokens)
     if processing_time == 0:  # 관련 없는 질문에 대한 특별 처리

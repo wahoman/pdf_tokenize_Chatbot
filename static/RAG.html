@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Question Answering</title>
+</head>
+<body>
+    <h1>RAG Question Answering System</h1>
+    <form action="/answer/" method="post">
+        <input type="text" name="question" id="question" required>
+        <button type="submit">Get Answer</button>
+    </form>
+    <div id="answer"></div>
+    <script>
+        const form = document.querySelector('form');
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch('/answer/', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('answer').textContent = 'Answer: ' + result.answer;
+        };
+    </script>
+</body>
+</html>

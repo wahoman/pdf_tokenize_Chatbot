@@ -4,31 +4,110 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PDF Question Answering</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center; /* Center text for all elements */
+    }
+    h1 {
+        margin-bottom: 24px; /* Add space below header */
+        font-size: 4em; /* Increased size */
+        color: #333;
+    }
+    form {
+        width: 100%; /* Full width for mobile responsiveness */
+        max-width: 640px; /* Max width for larger screens */
+        margin-bottom: 24px; /* Add space below form */
+    }
+    input[type="text"] {
+        width: calc(100% - 40px); /* Adjust input width considering padding */
+        padding: 20px; /* Increased padding */
+        margin-bottom: 16px; /* Add space below input */
+        border: 2px solid #ddd; /* Increase border thickness */
+        border-radius: 8px; /* Rounder borders */
+        font-size: 1.5em; /* Larger font size */
+        box-sizing: border-box;
+    }
+    button {
+        width: calc(100% - 40px); /* Adjust button width considering padding */
+        padding: 20px; /* Increased padding */
+        background-color: #5c67f2;
+        border: none;
+        border-radius: 8px; /* Rounder borders */
+        color: white;
+        cursor: pointer;
+        font-size: 1.5em; /* Larger font size */
+        box-sizing: border-box;
+    }
+    button:hover {
+        background-color: #4a54e1;
+    }
+    #responseArea {
+        width: 100%; /* Full width for mobile responsiveness */
+        max-width: 640px; /* Max width for larger screens */
+        margin-top: 20px;
+        height: 300px; /* Increased height */
+        padding: 10px 20px; /* Increased padding */
+        background-color: #fff;
+        border-radius: 8px; /* Rounder borders */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        color: #333;
+        font-size: 1.0em; /* Larger font size */
+        overflow-y: scroll; /* Allows scrolling */
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: left; /* Align text to the left inside the response area */
+    }
+</style>
 </head>
 <body>
-<h1>메뉴얼 챗봇</h1>
-<form id="questionForm" action="/answer/" method="post">
-    <input type="text" name="question" placeholder="입력" required><br><br>
-    <button type="submit">물어보기</button>
-</form>
-<div id="responseArea">질문을 입력해주세요!</div>
+    <div class="container">
+        <h1>메뉴얼 챗봇</h1>
+        <form id="questionForm" action="/answer/" method="post">
+            <input type="text" name="question" placeholder="질문을 입력하세요" required>
+            <button type="submit">물어보기</button>
+        </form>
+        <div id="responseArea">질문을 입력해주세요!</div>
+    </div>
 
 <script>
 document.getElementById("questionForm").onsubmit = async function(event) {
     event.preventDefault();
+    const responseArea = document.getElementById("responseArea");
+    responseArea.innerText = "답변을 검색 중입니다...";
+    responseArea.scrollTop = 0;
+
     const formData = new FormData(event.target);
     const response = await fetch('/answer/', {
         method: 'POST',
         body: formData
+    }).catch(error => {
+        responseArea.innerText = '서버와의 연결에 문제가 발생했습니다.';
+        console.error('Error:', error);
     });
+    if (!response.ok) {
+        responseArea.innerText = 'Error: No response from server.';
+        return;
+    }
     const result = await response.json();
 
-    let answerText = result.answer || 'Error: No response from server.';
+    let answerText = result.answer || '적절한 답변을 찾을 수 없습니다.';
     if (result.time !== undefined) {
         answerText += `\n 처리 시간: ${result.time.toFixed(2)}초`;
     }
 
-    document.getElementById("responseArea").innerText = answerText;
+    responseArea.innerText = answerText;
+    responseArea.scrollTop = 0; // 여기에서도 스크롤 위치를 맨 위로 설정
 };
 </script>
 </body>
