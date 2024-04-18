@@ -30,30 +30,29 @@ def load_tokens(file_path):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred while reading the file: {e}")
 
+def check_relevance(question, tokens):
+    # 단순히 토큰 중 일부가 질문에 포함되어 있는지 확인 (더 복잡한 로직으로 대체 가능)
+    context = ' '.join([token['lower_token'] for token in tokens])
+    return any(token in question.lower() for token in context.split())
+
 def query_gpt(question, tokens):
-    context = ' '.join([token['lower_token'] for token in tokens])  # 문맥을 토큰에서 생성
-    start_time = time.time()  # 질문 처리 시작 시간
+    context = ' '.join([token['lower_token'] for token in tokens])
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": "질문이 내용과 관련이 없다면 모른다고 해야합니다. 하지만 내용과 관련있는 정보에 대해서는 대답해도 좋습니다.:"},
+        messages=[{"role": "system", "content": "pdf 내용을 기반으로 대답해야 합니다."},
                   {"role": "user", "content": f"질문: {question} based on the context: {context}"}]
     )
-    end_time = time.time()  # 질문 처리 종료 시간
-    processing_time = end_time - start_time  # 처리 시간 계산
-    answer = response['choices'][0]['message']['content']
-    return answer, processing_time
+    return response['choices'][0]['message']['content']
 
 @app.post("/answer/")
 async def get_answer(question: str = Form(...)):
     tokens_file_path = 'C:/Users/SSTLabs/Desktop/여형구/LLM_RAG/tokens.json'
     tokens = load_tokens(tokens_file_path)
-    answer, processing_time = query_gpt(question, tokens)
-    if processing_time == 0:  # 관련 없는 질문에 대한 특별 처리
-        return JSONResponse(content={"answer": answer}, status_code=400)
-    if answer:
-        return JSONResponse(content={"answer": answer, "time": processing_time}, status_code=200)
+    if check_relevance(question, tokens):
+        answer = query_gpt(question, tokens)
+        return JSONResponse(content={"answer": answer}, status_code=200)
     else:
-        return JSONResponse(content={"answer": "그부분은 잘 모르겠어요", "time": processing_time}, status_code=404)
+        return JSONResponse(content={"answer": "관련 없는 질문에는 답변할 수 없습니다."}, status_code=400)
 
 if __name__ == "__main__":
     import uvicorn
