@@ -39,7 +39,7 @@ def query_gpt(question, tokens):
     context = ' '.join([token['lower_token'] for token in tokens])
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": "pdf 내용을 기반으로 가독성있게 대답해야 합니다. pdf와 관련없는 내용은 답변을 하지 말아야 합니다."},
+        messages=[{"role": "system", "content": "당신은 사용자에게 pdf내용으로 답변을 해주는 챗봇입니다. pdf에 있는 내용만으로 가독성있게 대답해야 합니다. 질문이 pdf에 없는 내용이라면 답변하지 말아야 합니다. "},
                   {"role": "user", "content": f"질문: {question} based on the context: {context}"}]
     )
     return response['choices'][0]['message']['content']

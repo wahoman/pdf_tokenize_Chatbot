@@ -51,22 +51,20 @@
         background-color: #4a54e1;
     }
     #responseArea {
-        width: 100%; /* Full width for mobile responsiveness */
-        max-width: 1500px; /* Max width for larger screens */
-        margin-top: 20px;
-        height: 300px; /* Increased height */
-        padding: 10px 20px; /* Increased padding */
+        min-height: 100px; /* 최소 높이 설정 */
+        max-height: 600px; /* 최대 높이 설정 */
+        padding: 10px 20px; /* Padding 유지 */
         background-color: #fff;
-        border-radius: 8px; /* Rounder borders */
+        border-radius: 8px; /* Rounded borders */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         color: #333;
-        font-size: 1.0em; /* Larger font size */
-        overflow-y: scroll; /* Allows scrolling */
+        font-size: 1.0em; /* Font size */
+        overflow-y: auto; /* 스크롤 바 자동으로 보이기 */
         box-sizing: border-box;
         display: flex;
         justify-content: center;
         align-items: center;
-        text-align: left; /* Align text to the left inside the response area */
+        text-align: left; /* Text align left */
     }
 </style>
 </head>
@@ -96,7 +94,7 @@ document.getElementById("questionForm").onsubmit = async function(event) {
         console.error('Error:', error);
     });
     if (!response.ok) {
-        responseArea.innerText = 'Error: No response from server.';
+        responseArea.innerText = '제가 답변할 수 없는 부분입니다.';
         return;
     }
     const result = await response.json();
