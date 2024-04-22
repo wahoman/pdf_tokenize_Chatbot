@@ -16,6 +16,8 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 if not openai.api_key:
     raise Exception("No OpenAI API key found. Please check your .env file.")
 
+client = openai.OpenAI(api_key=openai.api_key)
+
 # 정적 파일 디렉토리 설정
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -37,16 +39,28 @@ def check_relevance(question, tokens):
 
 def query_gpt(question, tokens):
     context = ' '.join([token['lower_token'] for token in tokens])
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": "당신은 사용자에게 pdf내용으로 답변을 해주는 챗봇입니다. pdf에 있는 내용만으로 가독성있게 대답해야 합니다. 질문이 pdf에 없는 내용이라면 답변하지 말아야 합니다. "},
-                  {"role": "user", "content": f"질문: {question} based on the context: {context}"}]
-    )
-    return response['choices'][0]['message']['content']
+    # 최대 허용 토큰 길이를 확인하고 초과하는 경우 줄임
+    max_tokens = 500
+    context_tokens = context.split()
+    if len(context_tokens) > max_tokens:
+        context = ' '.join(context_tokens[:max_tokens])  
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "당신은 사용자에게 pdf내용으로 답변을 해주는 챗봇입니다. pdf에 있는 내용만으로 가독성있게 대답해야 합니다. 질문이 pdf에 없는 내용이라면 답변을 거절해야 합니다."},
+                {"role": "user", "content": f"질문: {question} based on the context: {context}"}
+            ]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return "Error processing your request."
+
 
 @app.post("/answer/")
 async def get_answer(question: str = Form(...)):
-    tokens_file_path = 'C:/Users/SSTLabs/Desktop/여형구/LLM_RAG/tokens.json'
+    tokens_file_path = 'C:/Users/SSTLabs/Desktop/여형구/gptapi/tokens.json'
     tokens = load_tokens(tokens_file_path)
     if check_relevance(question, tokens):
         answer = query_gpt(question, tokens)
