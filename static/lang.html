@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Question Answer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #212529;
+        }
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            max-width: 400px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #ced4da;
+            border-radius: 0.25rem;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 0.25rem;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #responseArea {
+            width: 90%;
+            max-width: 400px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+            text-align: left;
+            font-size: 16px;
+            color: #212529;
+        }
+    </style>
+</head>
+<body>
+    <h1>질문에 답변해드립니다</h1>
+    <form id="questionForm" onsubmit="event.preventDefault(); submitQuestion();">
+        <input type="text" name="question" placeholder="질문을 입력하세요" required>
+        <button type="submit">제출하기</button>
+    </form>
+    <div id="responseArea">질문을 입력해주세요!</div>
+
+    <script>
+        async function submitQuestion() {
+            const formData = new FormData(document.getElementById('questionForm'));
+            const response = await fetch('/answer/', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                const result = await response.json();
+                document.getElementById('responseArea').innerText = result.answer;
+            } else {
+                document.getElementById('responseArea').innerText = '서버에 오류가 발생했습니다.';
+            }
+        }
+    </script>
+</body>
+</html>

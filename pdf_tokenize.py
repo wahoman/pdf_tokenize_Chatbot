@@ -25,8 +25,8 @@ def save_tokens(tokens, file_path):
         file.write(serialized_data)
 
 # 파일 경로 설정
-pdf_path = "C:/Users/SSTLabs/Desktop/여형구/주의사항.pdf"
-tokens_file_path = "C:/Users/SSTLabs/Desktop/여형구/tokens.json"
+pdf_path = "C:/Users/SSTLabs/Desktop/여형구/test.pdf"
+tokens_file_path = "C:/Users/SSTLabs/Desktop/여형구/test2.json"
 
 # 텍스트 추출 및 토큰화
 text = extract_text_from_pdf(pdf_path)

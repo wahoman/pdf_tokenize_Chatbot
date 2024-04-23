@@ -60,7 +60,7 @@ def query_gpt(question, tokens):
 
 @app.post("/answer/")
 async def get_answer(question: str = Form(...)):
-    tokens_file_path = 'C:/Users/SSTLabs/Desktop/여형구/gptapi/tokens.json'
+    tokens_file_path = 'C:/Users/SSTLabs/Desktop/여형구/gptapi/test2.json'
     tokens = load_tokens(tokens_file_path)
     if check_relevance(question, tokens):
         answer = query_gpt(question, tokens)
