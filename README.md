@@ -1,15 +1,16 @@
-pdf에 관련된 내용은 답변
-<img src="https://github.com/wahoman/pdf_tokenize_Chatbot/assets/93651467/a35c9193-2550-4c5e-8c13-388a15c9a8bf" width="50%" height="50%">
-
-pdf와 관련되지 않은 내용은 답변 X
-<img src="https://github.com/wahoman/pdf_tokenize_Chatbot/assets/93651467/85190197-9ecc-4ee9-807a-025d57439752" width="50%" height="50%">
+### PDF 임베딩 후 Langchain을 이용한 챗봇
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pdf에 관련된 내용은 답변을 하고, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;관련되지 않은 내용은 답변을 하지 않는다.
+<img src="https://github.com/wahoman/pdf_tokenize_Chatbot/assets/93651467/a35c9193-2550-4c5e-8c13-388a15c9a8bf" width="40%" height="40%">
 
 
-
+<img src="https://github.com/wahoman/pdf_tokenize_Chatbot/assets/93651467/85190197-9ecc-4ee9-807a-025d57439752" width="40%" height="40%">
 
 
 
-테스트 목록:
+
+
+
+### 테스트 목록:
 
 ### 1. 정확성 테스트 (Accuracy Testing)
 - **올바른 응답 검증**: 챗봇이 주어진 질문에 대해 정확하고 관련성 있는 답변을 제공하는지 테스트합니다.
