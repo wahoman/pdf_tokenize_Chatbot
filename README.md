@@ -1,3 +1,11 @@
+pdf에 관련된 내용은 답변
+![image](https://github.com/wahoman/pdf_tokenize_Chatbot/assets/93651467/a35c9193-2550-4c5e-8c13-388a15c9a8bf)
+
+pdf와 관련되지 않은 내용은 답변 X
+![image](https://github.com/wahoman/pdf_tokenize_Chatbot/assets/93651467/85190197-9ecc-4ee9-807a-025d57439752)
+
+
+
 테스트 목록:
 
 ### 1. 정확성 테스트 (Accuracy Testing)
