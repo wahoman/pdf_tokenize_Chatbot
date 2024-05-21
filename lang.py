@@ -23,7 +23,7 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
 # 문서 로딩 및 처리 준비
-loader = PyPDFLoader("C:/Users/SSTLabs/Desktop/20. 장민섭_YOLOv5를 이용한 2D X-Ray 이미지 상의 폭발물 탐지_Rev3.0.pdf")
+loader = PyPDFLoader("C:/Users/SSTLabs/Desktop/여형구/20. 장민섭_YOLOv5를 이용한 2D X-Ray 이미지 상의 폭발물 탐지_Rev3.0.pdf")
 documents = loader.load()
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 texts = text_splitter.split_documents(documents)
@@ -44,7 +44,7 @@ messages = [
     HumanMessagePromptTemplate.from_template("{question}")
 ]
 prompt = ChatPromptTemplate.from_messages(messages)
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, api_key=openai_api_key)
+llm = ChatOpenAI(model_name="gpt-4o", temperature=0, api_key=openai_api_key)
 chain = RetrievalQAWithSourcesChain.from_chain_type(
     llm=llm,
     chain_type="stuff",
@@ -61,6 +61,6 @@ async def read_root():
 # 질문 처리 경로
 @app.post("/answer/")
 async def answer(question: str = Form(...)):
-    result = chain.invoke(question)
+    result = chain.invoke({"question": question})
     answer = result['answer'] if 'answer' in result else "No answer found."
     return {"answer": answer}
