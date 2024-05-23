@@ -17,7 +17,7 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-
+ 
 # .env 파일에서 환경 변수 로드
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
