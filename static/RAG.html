@@ -1,29 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAG Question Answering</title>
+    <title>문서 기반 Q&A</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .answer {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    <h1>RAG Question Answering System</h1>
-    <form action="/answer/" method="post">
-        <input type="text" name="question" id="question" required>
-        <button type="submit">Get Answer</button>
-    </form>
-    <div id="answer"></div>
+    <div class="container">
+        <h1>문서 기반 Q&A</h1>
+        <form id="question-form">
+            <input type="text" id="question" name="question" placeholder="질문을 입력하세요..." required>
+            <button type="submit">질문하기</button>
+        </form>
+        <div class="answer" id="answer"></div>
+    </div>
+
     <script>
-        const form = document.querySelector('form');
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
+        document.getElementById('question-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const question = document.getElementById('question').value;
             const response = await fetch('/answer/', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'question': question
+                })
             });
-            const result = await response.json();
-            document.getElementById('answer').textContent = 'Answer: ' + result.answer;
-        };
+            const data = await response.json();
+            document.getElementById('answer').innerText = data.answer;
+        });
     </script>
 </body>
 </html>
